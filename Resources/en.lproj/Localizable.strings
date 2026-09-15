@@ -1,0 +1,28 @@
+"shelf.title" = "Shelf";
+"shelf.empty" = "Empty";
+"shelf.drop_hint" = "Shake a file or drag it here";
+
+"action.clear" = "Clear Shelf";
+"action.hide" = "Hide";
+"action.reveal" = "Show in Finder";
+"action.remove" = "Remove from Shelf";
+
+"menu.tooltip" = "Shelflet — temporary file shelf";
+"menu.empty" = "Shelf is empty";
+"menu.count" = "On shelf: %lu";
+"menu.show" = "Show Shelf";
+"menu.add_clipboard" = "Add from Clipboard";
+"menu.clear" = "Clear Shelf";
+"menu.shake" = "Show When Shaking";
+"menu.launch" = "Launch at Login";
+"menu.launch_approval" = "Launch at Login (Approval Required)";
+"menu.about" = "About Shelflet";
+"menu.quit" = "Quit Shelflet";
+
+"alert.launch_failed" = "Could Not Change Launch at Login";
+"alert.launch_approval_title" = "Allow Shelflet to Launch at Login";
+"alert.launch_approval_message" = "Open System Settings → General → Login Items and allow Shelflet in the background apps section.";
+"common.ok" = "OK";
+"common.got_it" = "Got It";
+
+"about.credits" = "A temporary file shelf. Shake a file while dragging, place it on the shelf, then drag it into another app.";

@@ -12,6 +12,7 @@ clang -O2 -fobjc-arc -fblocks -arch arm64 -arch x86_64 -mmacosx-version-min=13.0
     "$PROJECT_DIR/Sources/main.m" "$PROJECT_DIR/Sources/ShakeAnalyzer.m" \
     -o "$APP_DIR/Contents/MacOS/Shelflet"
 cp "$PROJECT_DIR/Info.plist" "$APP_DIR/Contents/Info.plist"
+cp -R "$PROJECT_DIR/Resources/." "$APP_DIR/Contents/Resources/"
 
 clang -O2 -fobjc-arc -framework Cocoa "$PROJECT_DIR/scripts/make-icon.m" -o "$PROJECT_DIR/.build/make-icon"
 "$PROJECT_DIR/.build/make-icon" "$PROJECT_DIR/.build/AppIcon-1024.png"

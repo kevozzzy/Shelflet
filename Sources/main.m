@@ -3,6 +3,10 @@
 #import <ServiceManagement/ServiceManagement.h>
 #import "ShakeAnalyzer.h"
 
+static NSString *SL(NSString *key) {
+    return [NSBundle.mainBundle localizedStringForKey:key value:key table:nil];
+}
+
 @interface SLShelfModel : NSObject
 @property(nonatomic, readonly) NSMutableArray<NSURL *> *files;
 @property(nonatomic, copy) void (^onChange)(void);
@@ -137,7 +141,7 @@ static const CGFloat SLCellHeight = 104;
         NSDictionary *attributes = @{NSFontAttributeName: [NSFont systemFontOfSize:13 weight:NSFontWeightMedium],
                                      NSForegroundColorAttributeName: [NSColor.whiteColor colorWithAlphaComponent:0.72],
                                      NSParagraphStyleAttributeName: paragraph};
-        [@"Встряхните файл или перетащите его сюда" drawInRect:NSMakeRect(20, NSMidY(self.bounds) + 2, NSWidth(self.bounds) - 40, 36)
+        [SL(@"shelf.drop_hint") drawInRect:NSMakeRect(20, NSMidY(self.bounds) + 2, NSWidth(self.bounds) - 40, 36)
                                                     withAttributes:attributes];
         return;
     }
@@ -181,10 +185,10 @@ static const CGFloat SLCellHeight = 104;
     if (self.pressedIndex < 0) return;
     [self.model markUsed];
     NSMenu *menu = [[NSMenu alloc] init];
-    NSMenuItem *reveal = [menu addItemWithTitle:@"Показать в Finder" action:@selector(revealPressedFile:) keyEquivalent:@""];
+    NSMenuItem *reveal = [menu addItemWithTitle:SL(@"action.reveal") action:@selector(revealPressedFile:) keyEquivalent:@""];
     reveal.target = self;
     [menu addItem:NSMenuItem.separatorItem];
-    NSMenuItem *remove = [menu addItemWithTitle:@"Убрать с полки" action:@selector(removePressedFile:) keyEquivalent:@""];
+    NSMenuItem *remove = [menu addItemWithTitle:SL(@"action.remove") action:@selector(removePressedFile:) keyEquivalent:@""];
     remove.target = self;
     [NSMenu popUpContextMenu:menu withEvent:event forView:self];
 }
@@ -251,15 +255,15 @@ static const CGFloat SLCellHeight = 104;
     self.layer.cornerRadius = 18;
     self.layer.masksToBounds = YES;
 
-    NSTextField *title = [NSTextField labelWithString:@"Полка"];
+    NSTextField *title = [NSTextField labelWithString:SL(@"shelf.title")];
     title.font = [NSFont systemFontOfSize:17 weight:NSFontWeightSemibold];
-    _countLabel = [NSTextField labelWithString:@"Пусто"];
+    _countLabel = [NSTextField labelWithString:SL(@"shelf.empty")];
     _countLabel.font = [NSFont systemFontOfSize:11 weight:NSFontWeightMedium];
     _countLabel.textColor = [NSColor.whiteColor colorWithAlphaComponent:0.66];
     _gridView = [[SLFileGridView alloc] initWithModel:model];
 
-    NSButton *clear = [self buttonWithSymbol:@"trash" help:@"Очистить полку" action:@selector(clearShelf:)];
-    NSButton *close = [self buttonWithSymbol:@"xmark" help:@"Скрыть" action:@selector(closeShelf:)];
+    NSButton *clear = [self buttonWithSymbol:@"trash" help:SL(@"action.clear") action:@selector(clearShelf:)];
+    NSButton *close = [self buttonWithSymbol:@"xmark" help:SL(@"action.hide") action:@selector(closeShelf:)];
     NSArray<NSView *> *views = @[title, _countLabel, _gridView, clear, close];
     for (NSView *view in views) {
         view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -293,7 +297,7 @@ static const CGFloat SLCellHeight = 104;
     return button;
 }
 - (void)refresh {
-    self.countLabel.stringValue = self.model.files.count ? [NSString stringWithFormat:@"%lu", self.model.files.count] : @"Пусто";
+    self.countLabel.stringValue = self.model.files.count ? [NSString stringWithFormat:@"%lu", self.model.files.count] : SL(@"shelf.empty");
     self.gridView.needsDisplay = YES;
 }
 - (void)clearShelf:(id)sender { [self.model clear]; }
@@ -462,32 +466,32 @@ static const CGFloat SLCellHeight = 104;
 - (void)configureStatusItem {
     self.statusItem = [NSStatusBar.systemStatusBar statusItemWithLength:NSSquareStatusItemLength];
     self.statusItem.button.image = [NSImage imageWithSystemSymbolName:@"tray.full" accessibilityDescription:@"Shelflet"];
-    self.statusItem.button.toolTip = @"Shelflet — временная полка для файлов";
+    self.statusItem.button.toolTip = SL(@"menu.tooltip");
     NSMenu *menu = [[NSMenu alloc] init];
     menu.delegate = self;
-    self.countMenuItem = [menu addItemWithTitle:@"Полка пуста" action:nil keyEquivalent:@""];
+    self.countMenuItem = [menu addItemWithTitle:SL(@"menu.empty") action:nil keyEquivalent:@""];
     self.countMenuItem.enabled = NO;
     [menu addItem:NSMenuItem.separatorItem];
-    [self addItemToMenu:menu title:@"Показать полку" action:@selector(toggleShelf:) key:@"s" modifiers:NSEventModifierFlagCommand | NSEventModifierFlagOption];
-    [self addItemToMenu:menu title:@"Добавить из буфера обмена" action:@selector(addFromClipboard:) key:@"v" modifiers:NSEventModifierFlagCommand | NSEventModifierFlagOption];
-    [self addItemToMenu:menu title:@"Очистить полку" action:@selector(clearShelf:) key:@"" modifiers:0];
+    [self addItemToMenu:menu title:SL(@"menu.show") action:@selector(toggleShelf:) key:@"s" modifiers:NSEventModifierFlagCommand | NSEventModifierFlagOption];
+    [self addItemToMenu:menu title:SL(@"menu.add_clipboard") action:@selector(addFromClipboard:) key:@"v" modifiers:NSEventModifierFlagCommand | NSEventModifierFlagOption];
+    [self addItemToMenu:menu title:SL(@"menu.clear") action:@selector(clearShelf:) key:@"" modifiers:0];
     [menu addItem:NSMenuItem.separatorItem];
-    self.shakeMenuItem = [self addItemToMenu:menu title:@"Показывать при встряхивании" action:@selector(toggleShake:) key:@"" modifiers:0];
-    self.launchAtLoginMenuItem = [self addItemToMenu:menu title:@"Запускать при входе" action:@selector(toggleLaunchAtLogin:) key:@"" modifiers:0];
+    self.shakeMenuItem = [self addItemToMenu:menu title:SL(@"menu.shake") action:@selector(toggleShake:) key:@"" modifiers:0];
+    self.launchAtLoginMenuItem = [self addItemToMenu:menu title:SL(@"menu.launch") action:@selector(toggleLaunchAtLogin:) key:@"" modifiers:0];
     [menu addItem:NSMenuItem.separatorItem];
-    [self addItemToMenu:menu title:@"О Shelflet" action:@selector(showAbout:) key:@"" modifiers:0];
-    [self addItemToMenu:menu title:@"Завершить Shelflet" action:@selector(quit:) key:@"q" modifiers:NSEventModifierFlagCommand];
+    [self addItemToMenu:menu title:SL(@"menu.about") action:@selector(showAbout:) key:@"" modifiers:0];
+    [self addItemToMenu:menu title:SL(@"menu.quit") action:@selector(quit:) key:@"q" modifiers:NSEventModifierFlagCommand];
     self.statusItem.menu = menu;
     [self refreshMenu];
 }
 - (void)menuWillOpen:(NSMenu *)menu { [self refreshMenu]; }
 - (void)refreshMenu {
-    self.countMenuItem.title = self.model.files.count ? [NSString stringWithFormat:@"На полке: %lu", self.model.files.count] : @"Полка пуста";
+    self.countMenuItem.title = self.model.files.count ? [NSString stringWithFormat:SL(@"menu.count"), self.model.files.count] : SL(@"menu.empty");
     self.shakeMenuItem.state = self.shakeDetector.enabled ? NSControlStateValueOn : NSControlStateValueOff;
     SMAppServiceStatus loginStatus = SMAppService.mainAppService.status;
     self.launchAtLoginMenuItem.title = loginStatus == SMAppServiceStatusRequiresApproval
-        ? @"Запускать при входе (нужно разрешение)"
-        : @"Запускать при входе";
+        ? SL(@"menu.launch_approval")
+        : SL(@"menu.launch");
     self.launchAtLoginMenuItem.state = loginStatus == SMAppServiceStatusEnabled
         ? NSControlStateValueOn
         : (loginStatus == SMAppServiceStatusRequiresApproval ? NSControlStateValueMixed : NSControlStateValueOff);
@@ -517,26 +521,26 @@ static const CGFloat SLCellHeight = 104;
     if (!registered && error) {
         [NSApp activateIgnoringOtherApps:YES];
         NSAlert *alert = [[NSAlert alloc] init];
-        alert.messageText = @"Не удалось изменить автозапуск";
+        alert.messageText = SL(@"alert.launch_failed");
         alert.informativeText = error.localizedDescription;
         alert.alertStyle = NSAlertStyleWarning;
-        [alert addButtonWithTitle:@"OK"];
+        [alert addButtonWithTitle:SL(@"common.ok")];
         [alert runModal];
     } else if (service.status == SMAppServiceStatusRequiresApproval) {
         [NSApp activateIgnoringOtherApps:YES];
         NSAlert *alert = [[NSAlert alloc] init];
-        alert.messageText = @"Разрешите автозапуск Shelflet";
-        alert.informativeText = @"Откройте «Системные настройки» → «Основные» → «Объекты входа» и разрешите Shelflet в разделе фоновых приложений.";
+        alert.messageText = SL(@"alert.launch_approval_title");
+        alert.informativeText = SL(@"alert.launch_approval_message");
         alert.alertStyle = NSAlertStyleInformational;
-        [alert addButtonWithTitle:@"Понятно"];
+        [alert addButtonWithTitle:SL(@"common.got_it")];
         [alert runModal];
     }
 }
 - (void)showAbout:(id)sender {
     [NSApp orderFrontStandardAboutPanelWithOptions:@{
         NSAboutPanelOptionApplicationName: @"Shelflet",
-        NSAboutPanelOptionApplicationVersion: @"1.2.0",
-        NSAboutPanelOptionCredits: [[NSAttributedString alloc] initWithString:@"Временная полка для файлов. Встряхните файл во время перетаскивания, положите его на полку, а затем перетащите в нужное приложение."]
+        NSAboutPanelOptionApplicationVersion: NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"] ?: @"",
+        NSAboutPanelOptionCredits: [[NSAttributedString alloc] initWithString:SL(@"about.credits")]
     }];
     [NSApp activateIgnoringOtherApps:YES];
 }

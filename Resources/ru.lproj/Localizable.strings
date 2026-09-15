@@ -1,0 +1,28 @@
+"shelf.title" = "Полка";
+"shelf.empty" = "Пусто";
+"shelf.drop_hint" = "Встряхните файл или перетащите его сюда";
+
+"action.clear" = "Очистить полку";
+"action.hide" = "Скрыть";
+"action.reveal" = "Показать в Finder";
+"action.remove" = "Убрать с полки";
+
+"menu.tooltip" = "Shelflet — временная полка для файлов";
+"menu.empty" = "Полка пуста";
+"menu.count" = "На полке: %lu";
+"menu.show" = "Показать полку";
+"menu.add_clipboard" = "Добавить из буфера обмена";
+"menu.clear" = "Очистить полку";
+"menu.shake" = "Показывать при встряхивании";
+"menu.launch" = "Запускать при входе";
+"menu.launch_approval" = "Запускать при входе (нужно разрешение)";
+"menu.about" = "О Shelflet";
+"menu.quit" = "Завершить Shelflet";
+
+"alert.launch_failed" = "Не удалось изменить автозапуск";
+"alert.launch_approval_title" = "Разрешите автозапуск Shelflet";
+"alert.launch_approval_message" = "Откройте «Системные настройки» → «Основные» → «Объекты входа» и разрешите Shelflet в разделе фоновых приложений.";
+"common.ok" = "OK";
+"common.got_it" = "Понятно";
+
+"about.credits" = "Временная полка для файлов. Встряхните файл во время перетаскивания, положите его на полку, а затем перетащите в нужное приложение.";

@@ -21,6 +21,7 @@ Pick up a file in Finder, shake it left and right, and Shelflet opens a floating
 - Add Finder files from the clipboard
 - Reveal or remove individual files
 - Optional launch at login
+- English and Russian interface, selected from the macOS language
 - No analytics, network access, or Accessibility permission required
 
 ## Install
@@ -76,6 +77,7 @@ Shelflet — нативная временная полка для файлов 
 - Неиспользуемая полка очищается через пять минут.
 - Окно перемещается за верхнюю шапку и остаётся поверх приложений.
 - Автозапуск включается через меню в верхней панели.
+- Английский и русский интерфейс выбирается автоматически по языку macOS.
 - Нет аналитики, сети и требования разрешения Accessibility.
 
 Для сборки нужны macOS 13+ и Command Line Tools. Готовый универсальный Release работает на Apple Silicon и Intel Mac.
